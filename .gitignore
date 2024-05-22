@@ -157,6 +157,8 @@ cython_debug/
 .vscode/
 tmp/
 wandb/
+forward_locomotion/runs/
+nohup.out
 outputs/
 deployment_image.tar
 *.mp4

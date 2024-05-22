@@ -34,8 +34,49 @@ This repository contains code for DrEureka's reward generation, RAPP, and domain
 
 The following instructions will install everything under one Conda environment. We have tested on Ubuntu 20.04.
 
-1. Create a new Conda environment with:
+On AWS running this ami: ami-0cf2b4e024cdb6960
+
+1. driver
     ```
+    sudo apt install nvidia-headless-535-server nvidia-utils-535-server -y
+    # prob reboot now
+    sudo reboot
+
+    # also on each reboot speed up GPUs to max
+     sudo nvidia-smi -ac "877,1530"
+    ```
+
+1. gpustat
+    ```
+    sudo apt install gpustat
+    ```
+    
+1. cuda
+    ```
+    wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/cuda-ubuntu2004.pin
+    sudo mv cuda-ubuntu2004.pin /etc/apt/preferences.d/cuda-repository-pin-600
+    wget https://developer.download.nvidia.com/compute/cuda/11.3.0/local_installers/cuda-repo-ubuntu2004-11-3-local_11.3.0-465.19.01-1_amd64.deb
+    sudo dpkg -i cuda-repo-ubuntu2004-11-3-local_11.3.0-465.19.01-1_amd64.deb
+    sudo apt-key add /var/cuda-repo-ubuntu2004-11-3-local/7fa2af80.pub
+    sudo apt-get update
+    sudo apt-get -y install cuda
+    ```
+
+1. this to .bashrc
+    ```
+    export CUDA_TOOLKIT_ROOT_DIR=/usr/local/cuda
+    export CUDA_NVCC_EXECUTABLE=/usr/local/cuda/bin/nvcc
+    export CUDA_INCLUDE_DIRS=/usr/local/cuda/include
+    export CUDA_CUDART_LIBRARY=/usr/local/cuda/lib64/libcudart.so
+    ```
+1. install anaconda
+    ```
+    bash Anaconda3-2024.02-1-Linux-x86_64.sh
+    ```    
+    ```
+    # make sure code is cloned
+    # then reopen windows to set env
+
     conda create -n dr_eureka python=3.8
     conda activate dr_eureka
     ```
@@ -63,15 +104,20 @@ The following instructions will install everything under one Conda environment. 
     ```
     cd forward_locomotion
     pip install -e .
+
+    # seems this needs:
+    # https://stackoverflow.com/questions/77124879/pip-extras-require-must-be-a-dictionary-whose-values-are-strings-or-lists-of
+
+    pip install setuptools==65.5.0 pip==21  
     cd ../globe_walking
     pip install -e .
     ```
-
 ## Usage
 We'll use forward locomotion (`forward_locomotion`) as an example. The following steps can also be done for globe walking (`globe_walking`).
 
 First, run reward generation (Eureka):
 ```
+# Ensure OPENAI_API_KEY is set in .bashrc
 cd ../eureka
 python eureka.py env=forward_locomotion
 ```

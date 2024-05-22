@@ -66,7 +66,7 @@ def train_mc(iterations, command_config, reward_config, dr_config, eureka_target
     name_prefix = name_prefix + wandb_prefix + "_" if wandb_prefix is not None else name_prefix
     wandb.init(
         project="forward_locomotion",
-        entity="upenn-pal",
+        entity="accelero",
         name=f"{name_prefix}{run_name}",
         group=wandb_group,
         config={

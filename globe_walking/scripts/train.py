@@ -145,7 +145,7 @@ def train_go1(iterations, dr_config, headless=True, resume_path=None, no_wandb=F
         name_prefix = wandb_group + "/" if wandb_group is not None else ""
         wandb.init(
             project="globe_walking",
-            entity="upenn-pal",
+            entity="accelero",
             name=f"{name_prefix}{run_name}",
             group=wandb_group,
             config={
